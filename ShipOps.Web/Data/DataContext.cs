@@ -26,6 +26,8 @@ namespace ShipOps.Web.Data
 
         public DbSet<NewEntity> News { get; set; }
 
+        public DbSet<NewImageEntity> NewImages { get; set; }
+
         public DbSet<OfficeEntity> Offices { get; set; }
 
         public DbSet<OpinionEntity> Opinions { get; set; }
