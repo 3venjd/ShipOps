@@ -12,6 +12,7 @@ namespace ShipOps.Web.Data.Entities
 
 
         [Required(ErrorMessage = "the field {0} is required")]
+        [StringLength(5, MinimumLength = 3, ErrorMessage = "the {0} field must have {1} numbers")]
         public int Voy_number { get; set; }
 
         [MaxLength(50, ErrorMessage = "the {0} field can no have more than {1} characters.")]

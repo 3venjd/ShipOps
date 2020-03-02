@@ -11,6 +11,7 @@ namespace ShipOps.Web.Data.Entities
         public int Id { get; set; }
 
         [Required(ErrorMessage = "the field {0} is required")]
+        [StringLength(1,MinimumLength = 1,ErrorMessage ="the {0} field must have {1} numbers")]
         public int Hold_Number { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:N3}", ApplyFormatInEditMode = true)]

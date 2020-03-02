@@ -47,5 +47,37 @@ namespace ShipOps.Web.Data
         public DbSet<VoyEntity> Voys { get; set; }
 
         public DbSet<VoyImageEntity> VoysImages { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<VoyEntity>()
+                .HasIndex(v => v.Voy_number)
+                .IsUnique();
+
+            modelBuilder.Entity<HoldEntity>()
+                .HasIndex(h => h.Hold_Number)
+                .IsUnique();
+
+            modelBuilder.Entity<CompanyEntity>()
+                .HasIndex(c => c.Name)
+                .IsUnique();
+
+            modelBuilder.Entity<VesselTypeEntity>()
+                .HasIndex(v => v.Type_Vessel)
+                .IsUnique();
+
+
+            //TODO: Update this
+            /*modelBuilder.Entity<EmployeeEntity>()
+                .HasIndex(e => e.Document)
+                .IsUnique();
+
+            modelBuilder.Entity<ClientEntity>()
+                .HasIndex(c => c.Document)
+                .IsUnique();
+                */
+        }
     }
 }

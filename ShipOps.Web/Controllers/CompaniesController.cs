@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using ShipOps.Web.Data;
 using ShipOps.Web.Data.Entities;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -50,8 +51,25 @@ namespace ShipOps.Web.Controllers
             if (ModelState.IsValid)
             {
                 _context.Add(companyEntity);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+
+
+                try
+                {
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (Exception ex)
+                {
+                    if (ex.InnerException.Message.Contains("duplicate"))
+                    {
+                        ModelState.AddModelError(string.Empty, "Already exist a company with that name");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty,ex.InnerException.Message);
+                    }
+                    
+                }
             }
             return View(companyEntity);
         }
@@ -81,8 +99,23 @@ namespace ShipOps.Web.Controllers
             if (ModelState.IsValid)
             {
                 _context.Update(companyEntity);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (Exception ex)
+                {
+                    if (ex.InnerException.Message.Contains("duplicate"))
+                    {
+                        ModelState.AddModelError(string.Empty, "Already exist a company with that name");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                    }
+
+                }
             }
             return View(companyEntity);
         }
