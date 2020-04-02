@@ -28,6 +28,6 @@ namespace ShipOps.Web.Data.Entities
         [Required(ErrorMessage = "the field {0} is required")]
         public string Email { get; set; }
 
-        //public ICollection<Employee> Employees { get; set; }
+        public ICollection<UserEntity> Employees { get; set; }
     }
 }

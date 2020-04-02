@@ -105,7 +105,7 @@ namespace ShipOps.Web.Data.Entities
 
         public CompanyEntity Company { get; set; }
 
-        //public EmployeeEntity Employee { get; set; }
+        public UserEntity Employee { get; set; }
 
         public PortEntity Port { get; set; }
 

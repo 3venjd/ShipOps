@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using ShipOps.Web.Data.Entities;
 using System;
 using System.Collections.Generic;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ShipOps.Web.Data
 {
-    public class DataContext : DbContext
+    public class DataContext : IdentityDbContext<UserEntity>
     {
         public DataContext(DbContextOptions<DataContext> options) : base(options)
         {
@@ -69,15 +70,11 @@ namespace ShipOps.Web.Data
                 .IsUnique();
 
 
-            //TODO: Update this
-            /*modelBuilder.Entity<EmployeeEntity>()
+
+            modelBuilder.Entity<UserEntity>()
                 .HasIndex(e => e.Document)
                 .IsUnique();
 
-            modelBuilder.Entity<ClientEntity>()
-                .HasIndex(c => c.Document)
-                .IsUnique();
-                */
         }
     }
 }

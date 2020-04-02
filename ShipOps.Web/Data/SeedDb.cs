@@ -1,4 +1,6 @@
-﻿using ShipOps.Web.Data.Entities;
+﻿using ShipOps.Common.Enumerations;
+using ShipOps.Web.Data.Entities;
+using ShipOps.Web.Helpers;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -8,32 +10,29 @@ namespace ShipOps.Web.Data
     public class SeedDb
     {
         private readonly DataContext _dataContext;
+        private readonly IUserHelper _userHelper;
 
-        public SeedDb(DataContext dataContext)
+        public SeedDb(DataContext dataContext, IUserHelper userHelper)
         {
             _dataContext = dataContext;
+            _userHelper = userHelper;
         }
 
         public async Task SeedAsync()
         {
             await _dataContext.Database.EnsureCreatedAsync();
 
-
-            /*
-            var client = await CheckUserAsync("1043244567", "Samir", "Rincon", "administration@multiport.com.co", "3124348945", "Client");
-            var clientp = await CheckUserAsync("2045786524", "Roberto", "Calero", "director@multiport.com.co", "3124348945", "Client");
-            var employee = await CheckUserAsync("9452094523", "Juan", "Pulgarin", "ops2@multiport.com.co", "3124348945", "Employee");
-            var manager = await CheckUserAsync("7854934563", "Evelio", "Jimenez", "soporte.sistemas@multiport.com.co", "3124348945", "Manager");
-            */
-
-            //await CheckManagerAsync(manager);
+            await CheckRolesAsync();
+            var SuperAdmin = await CheckUserAsync("7854934563", "Evelio", "Jimenez", "lui.eve.jim.dur@gmail.com", "3124348945", UserType.Admin);
+            var employee = await CheckUserAsync("9452094523", "Santiago", "Franco", "dejesusrock@hotmail.com", "3124348945", UserType.Employee);
+            var client = await CheckUserAsync("1043244567", "JR", "Lopez", "jeyarelo@hotmail.com", "3124348945", UserType.Client);
+            
             await CheckCompanyAsync();
             await CheckOffice();
-            //await CheckEmployeeAsync(employee);
             await CheckPortAsync();
             await CheckVesselTypeAsync();
             await CheckVesselAsync();
-            await CheckVoyAsync();
+            await CheckVoyAsync(employee);
             await CheckTripDetailAsync();
             await CheckOpinionAsync();
             await CheckVoyImageAsync();
@@ -45,9 +44,44 @@ namespace ShipOps.Web.Data
             await CheckTerminalAsync();
             await CheckHoldAsync();
             await CheckLineUpAsync();
-            //await CheckClient(client);
-            //await CheckClient(clientp);
 
+
+        }
+
+        private async Task<UserEntity> CheckUserAsync(string document,
+                                                      string first_name,
+                                                      string last_name,
+                                                      string email,
+                                                      string cellphone,
+                                                      UserType userType)
+        {
+            var user = await _userHelper.GetUserByEmail(email);
+            if (user == null)
+            {
+                user = new UserEntity
+                {
+                    FirstName = first_name,
+                    LastName = last_name,
+                    Email = email,
+                    UserName = email,
+                    Document = document,
+                    PhoneNumber = cellphone,
+                    UserType = userType
+
+                };
+
+                await _userHelper.AddUserAsync(user, "123456");
+                await _userHelper.AddUserToRoleAsync(user, userType.ToString());
+            }
+
+            return user;
+        }
+
+        private async Task CheckRolesAsync()
+        {
+            await _userHelper.CheckRoleAsync(UserType.Admin.ToString());
+            await _userHelper.CheckRoleAsync(UserType.Client.ToString());
+            await _userHelper.CheckRoleAsync(UserType.Employee.ToString());
         }
 
         private async Task CheckTripDetailAsync()
@@ -78,49 +112,12 @@ namespace ShipOps.Web.Data
             if (!_dataContext.Opinions.Any())
             {
                 _dataContext.Opinions.Add(new OpinionEntity { Qualification = 4, Description = "Amazing service", Voy = voy });
-                await _dataContext.SaveChangesAsync();
+                
             }
+            await _dataContext.SaveChangesAsync();
         }
 
-        /*private async Task CheckManagerAsync(User user)
-        {
-            if (!_dataContext.Managers.Any())
-            {
-                _dataContext.Managers.Add(new Manager { User = user });
-                await _dataContext.SaveChangesAsync();
-            }
-        }
-        */
-
-        /*private async Task<User> CheckUserAsync(string document, string firstanme, string lastname, string email, string cellphone, string role)
-        {
-            var user = await _userHelper.GetUserByEmailAsync(email);
-
-            if (user == null)
-            {
-                user = new User
-                {
-                    FirstName = firstanme,
-                    LastName = lastname,
-                    UserName = email,
-                    Email = email,
-                    PhoneNumber = cellphone,
-                    Document = document
-                };
-                await _userHelper.AddUserAsync(user, "123456");
-                await _userHelper.AddUserToRoleAsync(user, role);
-            }
-
-            return user;
-        }*/
-
-        /*private async Task CheckRoles()
-        {
-            await _userHelper.CheckRoleAsync("Manager");
-            await _userHelper.CheckRoleAsync("Employee");
-            await _userHelper.CheckRoleAsync("Client");
-        }
-        */
+        
         private async Task CheckAlertAsync()
         {
             var status = _dataContext.Statuses.FirstOrDefault();
@@ -146,14 +143,11 @@ namespace ShipOps.Web.Data
         {
             var alert = _dataContext.Alerts.FirstOrDefault();
 
-            //if (!_dataContext.Clients.Any())
-            //{
             AddAlertImage("Alert 1", "https://www.mmaoffshore.com/sites/mmaoffshorecomau//" +
                 "assets/public/image/ProductListing/Thumbnails/14ad7e97-12e7-4bf4-a610-" +
                 "acbdde9ee220-mermaid-leeuwin.jpg", alert);
 
             await _dataContext.SaveChangesAsync();
-            //}
         }
 
         private void AddAlertImage(string title, string URL, AlertEntity alert)
@@ -163,77 +157,26 @@ namespace ShipOps.Web.Data
                 Title = title,
                 ImageUrl = URL,
                 Alert = alert,
-
-            }
-
-            );
+            });
         }
-
-        /*private async Task CheckClient(User user)
-        {
-            var company = _dataContext.Companies.FirstOrDefault();
-            if (!_dataContext.Clients.Any())
-            {
-                AddClient(user, company);
-                await _dataContext.SaveChangesAsync();
-            }
-        }*/
-
-        /*private void AddClient(User client, Company company)
-        {
-            _dataContext.Clients.Add(new Client
-            {
-                User = client,
-                Company = company,
-
-            }
-
-            );
-        }*/
 
         private async Task CheckCompanyAsync()
         {
             if (!_dataContext.Companies.Any())
             {
-                AddCompany("Hyundai", "China", true);
-                await _dataContext.SaveChangesAsync();
+                _dataContext.Companies.Add(new CompanyEntity
+                {
+                    Name = "Hyundai",
+                    Country = "China",
+                    Pro = true,
+
+                });
             }
+            await _dataContext.SaveChangesAsync();
         }
 
-        private void AddCompany(string company_name, string country, bool pro)
-        {
-            _dataContext.Companies.Add(new CompanyEntity
-            {
-                Name = company_name,
-                Country = country,
-                Pro = pro,
-            }
-            );
-        }
+      
 
-        /*private async Task CheckEmployeeAsync(User user)
-        {
-            var office = _dataContext.Offices.FirstOrDefault();
-
-            if (!_dataContext.Employees.Any())
-            {
-                AddEmployees("Operation Manager", "ops2meu", user, office);
-
-                await _dataContext.SaveChangesAsync();
-            }
-        }*/
-
-        /*private void AddEmployees(string cargo, string skype, User user, Office office)
-        {
-            _dataContext.Employees.Add(new Employee
-            {
-                Cargo = cargo,
-                Skype = skype,
-                Office = office,
-                User = user
-            }
-            );
-        }*/
         private async Task CheckHoldAsync()
         {
             var status = _dataContext.Statuses.FirstOrDefault();
@@ -247,8 +190,6 @@ namespace ShipOps.Web.Data
                 AddHold(3, 2456, 20000, false, true, status);
 
                 AddHold(4, 5678, 3500, false, true, status);
-
-
 
                 await _dataContext.SaveChangesAsync();
             }
@@ -279,7 +220,7 @@ namespace ShipOps.Web.Data
                 AddLineUp("Sean Jhon", DateTime.Parse("06/06/2019"), DateTime.Parse("10/06/2019"),
                     DateTime.Parse("02/07/2019"), DateTime.Parse("02/07/2019"), "In Progress", "Steel",
                     "450000", "02/06/2019 - 02/07/2019", "Ravenna,Italy", "Cargil", "Allied Chemical Carriers",
-                    "Multiport", terminal);
+                    "Ship Company", terminal);
 
 
                 await _dataContext.SaveChangesAsync();
@@ -345,32 +286,27 @@ namespace ShipOps.Web.Data
         {
             var newn = _dataContext.News.FirstOrDefault();
 
-            if (!_dataContext.Alerts.Any())
+            if (!_dataContext.NewImages.Any())
             {
-                AddNewImage("https://www.mmaoffshore.com/sites/mmaoffshorecomau//assets/" +
-                    "public/image/ProductListing/Thumbnails/bb5781bb-24c8-4a8b-b1e2-d6ef4a507c9e-mma" +
-                    "-prestige.jpg", newn);
-                await _dataContext.SaveChangesAsync();
-            }
-        }
-
-        private void AddNewImage(string URL, NewEntity newn)
-        {
-            _dataContext.NewImages.Add
+                _dataContext.NewImages.Add
                 (
                     new NewImageEntity
                     {
-                        ImageUrl = URL,
+                        ImageUrl = "https://www.mmaoffshore.com/sites/mmaoffshorecomau//assets/" +
+                    "public/image/ProductListing/Thumbnails/bb5781bb-24c8-4a8b-b1e2-d6ef4a507c9e-mma" +
+                    "-prestige.jpg",
                         New = newn,
                     }
                 );
+                
+            }
+            await _dataContext.SaveChangesAsync();
         }
-
         private async Task CheckOffice()
         {
             if (!_dataContext.Offices.Any())
             {
-                AddFullStyle("Medellin", "Calle 4 sur #43A-149", "050022", "+4 2688444", "340 8435674", "assistant.mgr@multiport.com.co");
+                AddFullStyle("Medellin", "Calle 4 sur #43A-149", "050022", "+4 2688444", "340 8435674", "asistente@gmail.com");
                 await _dataContext.SaveChangesAsync();
             }
         }
@@ -506,65 +442,48 @@ namespace ShipOps.Web.Data
             }
         }
 
-        private async Task CheckVoyAsync()
+        private async Task CheckVoyAsync(UserEntity employee)
         {
 
             var vessel = _dataContext.Vessels.FirstOrDefault();
             var company = _dataContext.Companies.FirstOrDefault();
             var port = _dataContext.Ports.FirstOrDefault();
-            //var employee = _dataContext.Employees.FirstOrDefault();
+            var opinion = _dataContext.Opinions.FirstOrDefault();
 
             if (!_dataContext.Voys.Any())
             {
-                AddVoy(0000, "Aes Gener S.A", "16 Jun - 20 Jun", "70,000 mt +/- 10%", "Stream coal in bulk", "abt 43 cuft/mt",
-                    "Santa Marta, Colombia", "Carbosan / spsm (pier7)", "Huasco,Chile", "Aes Gener S.A",
-                    "Glencore Agriculture BV", "Colombia Natural Resources", "Aes Gener S.A",
-                    "+57 3124356789", 234.3, 534.4, DateTime.Parse("12/04/2018"), DateTime.Parse("01/01/2018"),
-                    DateTime.Parse("04/02/2018"), DateTime.Parse("05/02/2018"), DateTime.Parse("12/04/2018"),
-                    vessel, company, port
-                    //, employee
-                    );
+                _dataContext.Voys.Add(new VoyEntity
+                {
+                    Voy_number = 0,
+                    Account = "Aes Gener S.A",
+                    Laycan = "16 Jun - 20 Jun",
+                    Contract = "70,000 mt +/- 10%",
+                    Cargo = "Stream coal in bulk",
+                    Sf = "abt 43 cuft/mt",
+                    Pol = "Santa Marta, Colombia",
+                    Facility = "Carbosan / spsm (pier7)",
+                    Pod = "Huasco,Chile",
+                    Cargo_Charterer = "Aes Gener S.A",
+                    Owner_Charterer = "Glencore Agriculture BV",
+                    Shipper = "Colombia Natural Resources",
+                    Consignee = "Aes Gener S.A",
+                    Latitude = 234.3,
+                    Altitude = 534.4,
+                    LastKnowPosition = DateTime.Parse("12/04/2018"),
+                    Eta = DateTime.Parse("01/01/2018"),
+                    Etb = DateTime.Parse("04/02/2018"),
+                    Etc = DateTime.Parse("05/02/2018"),
+                    Etd = DateTime.Parse("12/04/2018"),
+                    Vessel = vessel,
+                    Company = company,
+                    Port = port,
+                    Employee = employee,
+                });
 
                 await _dataContext.SaveChangesAsync();
             }
         }
 
-        private void AddVoy(int voy_number, string account, string laycan, string contract, string cargo,
-                            string sf, string pol, string facility, string pod, string cargo_charterer,
-                            string owner_charterer, string shipper, string consignee, string mob,
-                            double latitude, double altitude, DateTime lastKnowPosition,
-                            DateTime eta, DateTime etb, DateTime etc, DateTime etd, VesselEntity vessel, CompanyEntity company, PortEntity port)//, Employee employee)
-        {
-            _dataContext.Voys.Add(new VoyEntity
-            {
-                Voy_number = voy_number,
-                Account = account,
-                Laycan = laycan,
-                Contract = contract,
-                Cargo = cargo,
-                Sf = sf,
-                Pol = pol,
-                Facility = facility,
-                Pod = pod,
-                Cargo_Charterer = cargo_charterer,
-                Owner_Charterer = owner_charterer,
-                Shipper = shipper,
-                Consignee = consignee,
-                Latitude = latitude,
-                Altitude = altitude,
-                LastKnowPosition = lastKnowPosition,
-                Eta = eta,
-                Etb = etb,
-                Etc = etc,
-                Etd = etd,
-                Vessel = vessel,
-                Company = company,
-                Port = port,
-                //Employee = employee,
-
-            }
-            );
-        }
         private async Task CheckVoyImageAsync()
         {
             var voy = _dataContext.Voys.FirstOrDefault();

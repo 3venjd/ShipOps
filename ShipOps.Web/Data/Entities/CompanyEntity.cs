@@ -19,7 +19,7 @@ namespace ShipOps.Web.Data.Entities
         [Required(ErrorMessage = "the field {0} is required")]
         public bool Pro { get; set; }
 
-        //public ICollection<ClientEntity> Clients { get; set; }
+        public ICollection<UserEntity> Clients { get; set; }
 
         public ICollection<VoyEntity> Voys { get; set; }
     }
