@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using ShipOps.Web.Data.Entities;
+using ShipOps.Web.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,5 +19,9 @@ namespace ShipOps.Web.Helpers
         Task AddUserToRoleAsync(UserEntity user,string roleName);
 
         Task<bool> IsUserInRoleAsync(UserEntity user, string roleName);
+
+        Task<SignInResult> LoginAsync(LoginViewModel model);
+
+        Task LogoutAsync();
     }
 }

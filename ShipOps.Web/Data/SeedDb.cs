@@ -23,9 +23,10 @@ namespace ShipOps.Web.Data
             await _dataContext.Database.EnsureCreatedAsync();
 
             await CheckRolesAsync();
-            var SuperAdmin = await CheckUserAsync("7854934563", "Evelio", "Jimenez", "lui.eve.jim.dur@gmail.com", "3124348945", UserType.Admin);
+            await CheckUserAsync("7854934563", "Evelio", "Jimenez", "lui.eve.jim.dur@gmail.com", "3124348945", UserType.Admin);
+            await CheckUserAsync("1043244567", "JR", "Lopez", "jeyarelo@hotmail.com", "3124348945", UserType.Client);
             var employee = await CheckUserAsync("9452094523", "Santiago", "Franco", "dejesusrock@hotmail.com", "3124348945", UserType.Employee);
-            var client = await CheckUserAsync("1043244567", "JR", "Lopez", "jeyarelo@hotmail.com", "3124348945", UserType.Client);
+            
             
             await CheckCompanyAsync();
             await CheckOffice();
@@ -66,7 +67,8 @@ namespace ShipOps.Web.Data
                     UserName = email,
                     Document = document,
                     PhoneNumber = cellphone,
-                    UserType = userType
+                    UserType = userType,
+                    
 
                 };
 
@@ -448,7 +450,6 @@ namespace ShipOps.Web.Data
             var vessel = _dataContext.Vessels.FirstOrDefault();
             var company = _dataContext.Companies.FirstOrDefault();
             var port = _dataContext.Ports.FirstOrDefault();
-            var opinion = _dataContext.Opinions.FirstOrDefault();
 
             if (!_dataContext.Voys.Any())
             {
