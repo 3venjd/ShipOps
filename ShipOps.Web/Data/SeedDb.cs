@@ -2,6 +2,7 @@
 using ShipOps.Web.Data.Entities;
 using ShipOps.Web.Helpers;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -24,8 +25,8 @@ namespace ShipOps.Web.Data
 
             await CheckRolesAsync();
             await CheckUserAsync("7854934563", "Evelio", "Jimenez", "lui.eve.jim.dur@gmail.com", "3124348945", UserType.Admin);
-            await CheckUserAsync("1043244567", "JR", "Lopez", "jeyarelo@hotmail.com", "3124348945", UserType.Client);
-            var employee = await CheckUserAsync("9452094523", "Santiago", "Franco", "dejesusrock@hotmail.com", "3124348945", UserType.Employee);
+            //var client = await CheckUserAsync("1043244567", "JR", "Lopez", "jeyarelo@hotmail.com", "3124348945", UserType.Client);
+            //var employee = await CheckUserAsync("9452094523", "Santiago", "Franco", "dejesusrock@hotmail.com", "3124348945", UserType.Employee);
             
             
             await CheckCompanyAsync();
@@ -33,7 +34,7 @@ namespace ShipOps.Web.Data
             await CheckPortAsync();
             await CheckVesselTypeAsync();
             await CheckVesselAsync();
-            await CheckVoyAsync(employee);
+            await CheckVoyAsync();
             await CheckTripDetailAsync();
             await CheckOpinionAsync();
             await CheckVoyImageAsync();
@@ -171,13 +172,35 @@ namespace ShipOps.Web.Data
                     Name = "Hyundai",
                     Country = "China",
                     Pro = true,
+                    Clients = new List<UserEntity>
+                     {
 
+                        new UserEntity
+                         {
+                             Document = "1043244567",
+                             FirstName = "JR",
+                             LastName = "Lopez",
+                             Email = "jeyarelo@hotmail.com",
+                             PicturePath = "",
+                             UserType = UserType.Client,
+
+                         },
+                         new UserEntity
+                         {
+                             Document = "3456789012",
+                             FirstName = "Julian",
+                             LastName = "Salazar",
+                             Email = "Jsalazar@hotmail.com",
+                             PicturePath = "",
+                             UserType = UserType.Client,
+
+                         }
+                     }
                 });
             }
             await _dataContext.SaveChangesAsync();
         }
 
-      
 
         private async Task CheckHoldAsync()
         {
@@ -247,7 +270,6 @@ namespace ShipOps.Web.Data
                 Cargo_Charterer = cargo_char,
                 Agency = agency,
                 Terminal = terminal,
-
             }
             );
         }
@@ -444,7 +466,7 @@ namespace ShipOps.Web.Data
             }
         }
 
-        private async Task CheckVoyAsync(UserEntity employee)
+        private async Task CheckVoyAsync()
         {
 
             var vessel = _dataContext.Vessels.FirstOrDefault();
@@ -478,7 +500,19 @@ namespace ShipOps.Web.Data
                     Vessel = vessel,
                     Company = company,
                     Port = port,
-                    Employee = employee,
+                    
+                Employee = new UserEntity
+                    {
+                        Document = "9452094523",
+                        FirstName = "Santiago",
+                        LastName = "Franco",
+                        Email = "dejesusrock@hotmail.com",
+                        PhoneNumber = "3124348945",
+                        PicturePath = "",
+                        UserType = UserType.Employee,
+                        Office = _dataContext.Offices.FirstOrDefault()
+
+                    },
                 });
 
                 await _dataContext.SaveChangesAsync();
