@@ -21,12 +21,10 @@ namespace ShipOps.Web.Data
 
         public async Task SeedAsync()
         {
-            await _dataContext.Database.EnsureCreatedAsync();
+          await _dataContext.Database.EnsureCreatedAsync();
 
             await CheckRolesAsync();
             await CheckUserAsync("7854934563", "Evelio", "Jimenez", "lui.eve.jim.dur@gmail.com", "3124348945", UserType.Admin);
-            //var client = await CheckUserAsync("1043244567", "JR", "Lopez", "jeyarelo@hotmail.com", "3124348945", UserType.Client);
-            //var employee = await CheckUserAsync("9452094523", "Santiago", "Franco", "dejesusrock@hotmail.com", "3124348945", UserType.Employee);
             
             
             await CheckCompanyAsync();
@@ -46,7 +44,7 @@ namespace ShipOps.Web.Data
             await CheckTerminalAsync();
             await CheckHoldAsync();
             await CheckLineUpAsync();
-
+            
 
         }
 
@@ -93,7 +91,7 @@ namespace ShipOps.Web.Data
 
             if (!_dataContext.Alerts.Any())
             {
-                AddTripDetail(DateTime.Parse("12/04/2018"), 324.4, 532.3, voy);
+                AddTripDetail(DateTime.Parse("01/01/2018"), 324.4, 532.3, voy);
                 await _dataContext.SaveChangesAsync();
             }
         }
@@ -126,7 +124,7 @@ namespace ShipOps.Web.Data
             var status = _dataContext.Statuses.FirstOrDefault();
             if (!_dataContext.Alerts.Any())
             {
-                AddAlert(DateTime.Parse("12/04/2018"), "Photo about Alert in Operation", status);
+                AddAlert(DateTime.Parse("01/01/2018"), "Photo about Alert in Operation", status);
                 await _dataContext.SaveChangesAsync();
             }
         }
@@ -181,6 +179,8 @@ namespace ShipOps.Web.Data
                              FirstName = "JR",
                              LastName = "Lopez",
                              Email = "jeyarelo@hotmail.com",
+                             UserName = "jeyarelo@hotmail.com",
+                             PhoneNumber = "3156783425",
                              PicturePath = "",
                              UserType = UserType.Client,
 
@@ -191,6 +191,8 @@ namespace ShipOps.Web.Data
                              FirstName = "Julian",
                              LastName = "Salazar",
                              Email = "Jsalazar@hotmail.com",
+                             UserName = "Jsalazar@hotmail.com",
+                             PhoneNumber = "3156783425",
                              PicturePath = "",
                              UserType = UserType.Client,
 
@@ -242,9 +244,9 @@ namespace ShipOps.Web.Data
             if (!_dataContext.LineUps.Any())
             {
 
-                AddLineUp("Sean Jhon", DateTime.Parse("06/06/2019"), DateTime.Parse("10/06/2019"),
-                    DateTime.Parse("02/07/2019"), DateTime.Parse("02/07/2019"), "In Progress", "Steel",
-                    "450000", "02/06/2019 - 02/07/2019", "Ravenna,Italy", "Cargil", "Allied Chemical Carriers",
+                AddLineUp("Sean Jhon", DateTime.Parse("01/01/2019"), DateTime.Parse("01/01/2019"),
+                    DateTime.Parse("01/01/2019"), DateTime.Parse("01/01/2019"), "In Progress", "Steel",
+                    "450000", "01/01/2019 - 01/01/2019", "Ravenna,Italy", "Cargil", "Allied Chemical Carriers",
                     "Ship Company", terminal);
 
 
@@ -288,7 +290,7 @@ namespace ShipOps.Web.Data
                     " remaining essentially unchanged. It was popularised in the 1960s " +
                     "with the release of Letraset sheets containing Lorem Ipsum passages" +
                     "and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum",
-                    DateTime.Parse("02/02/2019")
+                    DateTime.Parse("01/01/2019")
                     );
 
                 await _dataContext.SaveChangesAsync();
@@ -377,7 +379,7 @@ namespace ShipOps.Web.Data
             var voy = _dataContext.Voys.FirstOrDefault();
             if (!_dataContext.Statuses.Any())
             {
-                AddStatus("In Progress", DateTime.Parse("12/04/2018"), DateTime.Parse("12/04/2018"), DateTime.Parse("12/04/2018"), DateTime.Parse("12/04/2018"), DateTime.Parse("12/04/2018"), DateTime.Parse("12/04/2018"), voy);
+                AddStatus("In Progress", DateTime.Parse("01/01/2018"), DateTime.Parse("01/01/2018"), DateTime.Parse("01/01/2018"), DateTime.Parse("01/01/2018"), DateTime.Parse("01/01/2018"), DateTime.Parse("01/01/2018"), voy);
                 await _dataContext.SaveChangesAsync();
             }
         }
@@ -494,9 +496,9 @@ namespace ShipOps.Web.Data
                     Altitude = 534.4,
                     LastKnowPosition = DateTime.Parse("12/04/2018"),
                     Eta = DateTime.Parse("01/01/2018"),
-                    Etb = DateTime.Parse("04/02/2018"),
-                    Etc = DateTime.Parse("05/02/2018"),
-                    Etd = DateTime.Parse("12/04/2018"),
+                    Etb = DateTime.Parse("01/01/2018"),
+                    Etc = DateTime.Parse("01/01/2018"),
+                    Etd = DateTime.Parse("01/01/2018"),
                     Vessel = vessel,
                     Company = company,
                     Port = port,

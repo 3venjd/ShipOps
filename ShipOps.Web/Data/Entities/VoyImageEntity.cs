@@ -14,7 +14,7 @@ namespace ShipOps.Web.Data.Entities
 
         //TODO: Change Path
         [Display(Name = "Image")]
-        public string ImageFullPath => string.IsNullOrEmpty(ImageUrl) ? null : $"https://MEU.azurewebsites.net{ImageUrl.Substring(1)}";
+        public string ImageFullPath => string.IsNullOrEmpty(ImageUrl) ? null : $"https://shipops.azurewebsites.net{ImageUrl.Substring(1)}";
 
         public VoyEntity Voy { get; set; }
     }

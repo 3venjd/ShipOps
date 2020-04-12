@@ -12,7 +12,7 @@ namespace ShipOps.Common.Models
 
         public string ImageUrl { get; set; }
 
-        public string ImageFullPath => string.IsNullOrEmpty(ImageUrl) ? null : $"https://MEU.azurewebsites.net{ImageUrl.Substring(1)}";
+        public string ImageFullPath => string.IsNullOrEmpty(ImageUrl) ? null : $"https://shipops.azurewebsites.net{ImageUrl.Substring(1)}";
 
     }
 }
