@@ -19,7 +19,7 @@ namespace ShipOps.Prism
         {
             InitializeComponent();
 
-            await NavigationService.NavigateAsync("NavigationPage/VoysDetailsPage");
+            await NavigationService.NavigateAsync("ShipOpsMasterDetailPage/NavigationPage/NewsPage");
         }
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
@@ -44,6 +44,7 @@ namespace ShipOps.Prism
             containerRegistry.RegisterForNavigation<VesselsPage, VesselsPageViewModel>();
             containerRegistry.RegisterForNavigation<VoysDetailsPage, VoysDetailsPageViewModel>();
             containerRegistry.RegisterForNavigation<VoysPage, VoysPageViewModel>();
+            containerRegistry.RegisterForNavigation<ShipOpsMasterDetailPage, ShipOpsMasterDetailPageViewModel>();
         }
     }
 }

@@ -1,14 +1,15 @@
 ﻿using Prism.Commands;
 using Prism.Mvvm;
+using Prism.Navigation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace ShipOps.Prism.ViewModels
 {
-    public class OfficesPageViewModel : BindableBase
+    public class OfficesPageViewModel : ViewModelBase
     {
-        public OfficesPageViewModel()
+        public OfficesPageViewModel(INavigationService navigationService) : base(navigationService)
         {
 
         }
