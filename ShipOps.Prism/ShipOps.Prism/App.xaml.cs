@@ -10,11 +10,7 @@ namespace ShipOps.Prism
 {
     public partial class App
     {
-        /* 
-         * The Xamarin Forms XAML Previewer in Visual Studio uses System.Activator.CreateInstance.
-         * This imposes a limitation in which the App class must have a default constructor. 
-         * App(IPlatformInitializer initializer = null) cannot be handled by the Activator.
-         */
+
         public App() : this(null) { }
 
         public App(IPlatformInitializer initializer) : base(initializer) { }
@@ -23,13 +19,31 @@ namespace ShipOps.Prism
         {
             InitializeComponent();
 
-            await NavigationService.NavigateAsync("NavigationPage/MainPage");
+            await NavigationService.NavigateAsync("NavigationPage/VoysDetailsPage");
         }
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
             containerRegistry.RegisterForNavigation<NavigationPage>();
-            containerRegistry.RegisterForNavigation<MainPage, MainPageViewModel>();
+            containerRegistry.RegisterForNavigation<HomePage, HomePageViewModel>();
+            containerRegistry.RegisterForNavigation<AboutUsPage, AboutUsPageViewModel>();
+            containerRegistry.RegisterForNavigation<AlertsPage, AlertsPageViewModel>();
+            containerRegistry.RegisterForNavigation<FullStylePage, FullStylePageViewModel>();
+            containerRegistry.RegisterForNavigation<LineUpsDetailPage, LineUpsDetailPageViewModel>();
+            containerRegistry.RegisterForNavigation<LineUpsPage, LineUpsPageViewModel>();
+            containerRegistry.RegisterForNavigation<LoginPage, LoginPageViewModel>();
+            containerRegistry.RegisterForNavigation<NewsDetailPage, NewsDetailPageViewModel>();
+            containerRegistry.RegisterForNavigation<NewsPage, NewsPageViewModel>();
+            containerRegistry.RegisterForNavigation<OfficeDetailsPage, OfficeDetailsPageViewModel>();
+            containerRegistry.RegisterForNavigation<OfficesPage, OfficesPageViewModel>();
+            containerRegistry.RegisterForNavigation<PortsDetailsPage, PortsDetailsPageViewModel>();
+            containerRegistry.RegisterForNavigation<PortsPage, PortsPageViewModel>();
+            containerRegistry.RegisterForNavigation<RatePage, RatePageViewModel>();
+            containerRegistry.RegisterForNavigation<StatusPage, StatusPageViewModel>();
+            containerRegistry.RegisterForNavigation<TerminalsPage, TerminalsPageViewModel>();
+            containerRegistry.RegisterForNavigation<VesselsPage, VesselsPageViewModel>();
+            containerRegistry.RegisterForNavigation<VoysDetailsPage, VoysDetailsPageViewModel>();
+            containerRegistry.RegisterForNavigation<VoysPage, VoysPageViewModel>();
         }
     }
 }
