@@ -3,17 +3,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:prism="http://prismlibrary.com"
              prism:ViewModelLocator.AutowireViewModel="True"
-             x:Class="ShipOps.Prism.Views.VoysPage">
+             x:Class="ShipOps.Prism.Views.VoysPage"
+             Title="Voys">
 
     <StackLayout>
-        <ListView
-            ItemsSource="{Binding Voys}"
-            HasUnevenRows="True"
-            >
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <ViewCell>
-                        <Grid 
+        <Grid 
                             RowSpacing="5"
                             Margin="10"
                             x:Name="Statuses"
@@ -150,11 +144,9 @@
                                 />
                             </Grid>
                         </Grid>
-                    </ViewCell>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+                  
     </StackLayout>
+
 
 
 </ContentPage>

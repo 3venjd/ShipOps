@@ -9,8 +9,7 @@
 
     <MasterDetailPage.Master>
         <ContentPage Title="Menu"
-                     BackgroundColor="Black"
-                     BackgroundImageSource="menubackground.png"
+                     BackgroundColor="#0F1D44"
                      >
             <StackLayout
                 BackgroundColor="Transparent"
