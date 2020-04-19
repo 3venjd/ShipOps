@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Plugin.Permissions" Version="6.0.1" />
     <PackageReference Include="Syncfusion.Xamarin.SfChart" Version="18.1.0.44" />
     <PackageReference Include="Syncfusion.Xamarin.SfRating" Version="18.1.0.44" />
     <PackageReference Include="Xamarin.Forms" Version="4.5.0.617" />

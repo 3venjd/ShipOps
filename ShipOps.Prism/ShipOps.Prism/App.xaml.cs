@@ -1,5 +1,6 @@
 ﻿using Prism;
 using Prism.Ioc;
+using ShipOps.Common.Services;
 using ShipOps.Prism.ViewModels;
 using ShipOps.Prism.Views;
 using Xamarin.Forms;
@@ -24,6 +25,7 @@ namespace ShipOps.Prism
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
+            containerRegistry.Register<IGeoLocatorService, GeoLocatorService>();
             containerRegistry.RegisterForNavigation<NavigationPage>();
             containerRegistry.RegisterForNavigation<HomePage, HomePageViewModel>();
             containerRegistry.RegisterForNavigation<AboutUsPage, AboutUsPageViewModel>();
