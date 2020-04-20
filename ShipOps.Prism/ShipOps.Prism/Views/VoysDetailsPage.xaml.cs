@@ -1,8 +1,7 @@
 ﻿using Plugin.Permissions;
 using Plugin.Permissions.Abstractions;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using ShipOps.Common.Services;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Maps;
 
