@@ -28,7 +28,7 @@ namespace ShipOps.Prism.ViewModels
                 new Menu
                 {
                     Icon = "ic_Vessel.png",
-                    PageName = "VoysDetailsPage",
+                    PageName = "VoysPage",
                     Title = "YOUR VOYS",
                 },
                 new Menu
