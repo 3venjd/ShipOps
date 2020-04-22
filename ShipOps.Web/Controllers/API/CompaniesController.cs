@@ -1,8 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ShipOps.Web.Data;
+using ShipOps.Web.Data.Entities;
 using ShipOps.Web.Helpers;
-using System.Threading.Tasks;
 
 namespace ShipOps.Web.Controllers.API
 {
@@ -20,6 +25,8 @@ namespace ShipOps.Web.Controllers.API
             _context = context;
             _converterHerlper = converterHerlper;
         }
+
+      
 
         [HttpGet("{name_comany}")]
         public async Task<IActionResult> GetCompanyEntity([FromRoute] string name_comany)
@@ -64,7 +71,7 @@ namespace ShipOps.Web.Controllers.API
             return Ok(_converterHerlper.ToCompanyResponse(companyEntity));
         }
 
-
-
+       
+       
     }
 }
