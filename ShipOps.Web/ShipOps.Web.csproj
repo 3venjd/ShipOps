@@ -14,4 +14,10 @@
     <ProjectReference Include="..\ShipOps.Common\ShipOps.Common.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\images\AlertGallery\" />
+    <Folder Include="wwwroot\images\NewGallery\" />
+    <Folder Include="wwwroot\images\VoyGallery\" />
+  </ItemGroup>
+
 </Project>

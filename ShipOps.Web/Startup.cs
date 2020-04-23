@@ -55,6 +55,9 @@ namespace ShipOps.Web
 
 
             services.AddTransient<SeedDb>();
+            services.AddScoped<ICombosHelper, CombosHelper>();
+            services.AddScoped<IImageHelper, ImageHelper>();
+            services.AddScoped<IConverterHerlper, ConverterHelper>();
             services.AddScoped<IUserHelper, UserHelper>();
             services.AddScoped<IConverterHerlper, ConverterHelper>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);

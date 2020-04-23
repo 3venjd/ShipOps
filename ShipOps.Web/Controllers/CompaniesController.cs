@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using ShipOps.Web.Data;
 using ShipOps.Web.Data.Entities;
+using ShipOps.Web.Helpers;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,42 +12,47 @@ namespace ShipOps.Web.Controllers
     public class CompaniesController : Controller
     {
         private readonly DataContext _context;
+        private readonly IUserHelper _userHelper;
+        private readonly ICombosHelper _combosHelper;
+        private readonly IConverterHerlper _converterHerlper;
+        private readonly IImageHelper _imageHelper;
 
-        public CompaniesController(DataContext context)
+        public CompaniesController(DataContext context,
+                                   IUserHelper userHelper,
+                                   ICombosHelper combosHelper,
+                                   IConverterHerlper converterHerlper,
+                                   IImageHelper imageHelper
+                                  )
         {
             _context = context;
+            _userHelper = userHelper;
+            _combosHelper = combosHelper;
+            _converterHerlper = converterHerlper;
+            _imageHelper = imageHelper;
         }
 
-        public async Task<IActionResult> Index()
+        // Companies
+
+        public IActionResult Index()
         {
-            return View(await _context.Companies.ToListAsync());
-        }
-
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var companyEntity = await _context.Companies.FindAsync(id);
-            if (companyEntity == null)
-            {
-                return NotFound();
-            }
-
-            return View(companyEntity);
+            return View(_context.Companies
+                         .Include(c => c.Clients)
+                         .Include(v => v.Voys)
+                         .ThenInclude(s => s.Statuses)
+                         .Include(v => v.Voys)
+                         .ThenInclude(ve => ve.Vessel)
+                );
         }
 
         [HttpGet]
-        public IActionResult Create()
+        public IActionResult Create_company()
         {
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(CompanyEntity companyEntity)
+        public async Task<IActionResult> Create_company(CompanyEntity companyEntity)
         {
             if (ModelState.IsValid)
             {
@@ -73,7 +79,8 @@ namespace ShipOps.Web.Controllers
             }
             return View(companyEntity);
         }
-        public async Task<IActionResult> Edit(int? id)
+
+        public async Task<IActionResult> Edit_Company(int? id)
         {
             if (id == null)
             {
@@ -87,9 +94,10 @@ namespace ShipOps.Web.Controllers
             }
             return View(companyEntity);
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, CompanyEntity companyEntity)
+        public async Task<IActionResult> Edit_company(int id, CompanyEntity companyEntity)
         {
             if (id != companyEntity.Id)
             {
@@ -119,22 +127,35 @@ namespace ShipOps.Web.Controllers
             }
             return View(companyEntity);
         }
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete_company(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var companyEntity = await _context.Companies.FindAsync(id);
+            var companyEntity = await _context.Companies
+                .Include(c => c.Clients)
+                .Include(v => v.Voys)
+                .FirstOrDefaultAsync(p => p.Id == id);
             if (companyEntity == null)
             {
                 return NotFound();
             }
+
+            if (companyEntity.Clients.Count != 0 || companyEntity.Voys.Count != 0)
+            {
+                ModelState.AddModelError(string.Empty, "You can't delete this company, because it has data asociated");
+                return RedirectToAction(nameof(Index));
+            }
+
+
             _context.Companies.Remove(companyEntity);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+
+        //
 
         
     }
